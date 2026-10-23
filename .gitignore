@@ -1,0 +1,22 @@
+# Brother's downloaded and extracted proprietary driver package
+*.deb
+control.tar.*
+data.tar.*
+debian-binary
+extracted/
+
+# Generated print data and local test artifacts
+test-output/
+*.prn
+*.ppm
+ipp-test/*.log
+ipp-test/received-document
+
+# Python/macOS/editor artifacts
+__pycache__/
+*.py[cod]
+.DS_Store
+.env
+.env.*
+*.pem
+*.key

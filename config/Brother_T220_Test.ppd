@@ -1,0 +1,13 @@
+*PPD-Adobe: "4.3"
+*FormatVersion: "4.3"
+*FileVersion: "1.0"
+*LanguageVersion: English
+*LanguageEncoding: ISOLatin1
+*PCFileName: "BRT220.PPD"
+*Manufacturer: "Brother"
+*Product: "(DCP-T220)"
+*ModelName: "Brother DCP-T220 Test"
+*NickName: "Brother DCP-T220 Test (Raw Passthrough)"
+*ShortNickName: "Brother DCP-T220 Test"
+*cupsVersion: 2.0
+*cupsFilter: "application/vnd.cups-raw 0 -"
