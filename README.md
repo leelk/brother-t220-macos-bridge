@@ -9,7 +9,7 @@ macOS application -> local IPP printer -> Python bridge
 -> Docker/Ghostscript -> Brother Linux filter -> CUPS USB queue -> printer
 ```
 
-The current configuration produces A4, normal-quality, full-colour output. Colour printing has been physically tested. The virtual printer advertises colour support when launched with the provided script. A previously running monochrome instance and cached Gray-only macOS queue were corrected; the user subsequently confirmed a colour print-dialog preview in Preview with the virtual printer and Default Settings selected. See [colour preview checks and limitations](docs/COLOR_PREVIEW.md).
+The current configuration produces A4, normal-quality output, with full colour by default and per-job grayscale support. Colour printing has been physically tested. The virtual printer advertises colour support when launched with the provided script. A previously running monochrome instance and cached Gray-only macOS queue were corrected; the user subsequently confirmed a colour print-dialog preview in Preview with the virtual printer and Default Settings selected. See [colour preview checks and limitations](docs/COLOR_PREVIEW.md).
 
 ## Requirements
 
@@ -104,10 +104,49 @@ Convert and submit a PDF to the USB queue:
 python3 brother-bridge.py document.pdf
 ```
 
+## Grayscale printing
+
+In Cmd+P, select the virtual printer, scroll to **Printer Options** and look
+for **Color Mode**, **Output Mode**, or **Print in Color** (wording varies by
+application). Select **Grayscale** or turn off **Print in Color** for this job.
+The queue exposes RGB and Gray; some applications hide this under a collapsed
+printer-options section. Leave colour enabled for full-colour output.
+
+The bridge forwards IPP `print-color-mode=monochrome` to Brother's `Mono`
+configuration in a temporary per-job file. `color`, `auto`, and missing options
+preserve FullColor. No service restart is required for these script changes.
+
+You can also explicitly submit a grayscale PDF from Terminal (this prints):
+
+```sh
+lp -d Brother_T220_Virtual -o print-color-mode=monochrome document.pdf
+# Or bypass the virtual queue:
+python3 brother-bridge.py document.pdf --color-mode monochrome
+```
+
+Convert without printing:
+
+```sh
+./convert-brother.sh document.pdf document.prn monochrome
+```
+
+Validation without printing:
+
+```sh
+python3 -m unittest discover -s tests -v
+ipptool -tv ipp://localhost:8631/ipp/print ipp-test/grayscale-job.test
+```
+
+Tests cover option forwarding and per-job configuration with mocked Docker
+and printing. Actual grayscale output and the application's grayscale control
+still require verification: print a coloured document in grayscale, then in
+colour and confirm the second job stays coloured. No physical grayscale test
+has been performed. No claim is made about exclusive black-ink use.
+
 ## Current limitations
 
 - Docker Desktop and the local IPP service must be running.
-- A4, normal quality, and full colour are currently fixed in the converter.
+- A4 and normal quality are currently fixed in the converter. Colour or grayscale can be selected per job.
 - Duplex and print-dialog option mapping are not implemented.
 - Multipage output is implemented page-by-page but needs broader physical testing.
 - This is an independent experimental project, not an official Brother product.

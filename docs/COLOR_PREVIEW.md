@@ -57,12 +57,13 @@ user, but was not repeated after this repair.
 
 The installed ippeveprinter built-in colour profile uses default `auto`
 and also advertises monochrome and generic quality/media options. The
-converter remains fixed to A4, Normal and FullColor and does not map these
-options. Monochrome selection is therefore not implemented end to end.
+converter remains fixed to A4 and Normal. Per-job monochrome selection is
+now forwarded to the vendor Mono setting; colour/auto retain FullColor.
+Physical grayscale output still requires verification. Other generic options
+are not mapped.
 The `-a` option loads a replacement attribute profile, rather than a small
 additive override; no partial profile was introduced to risk losing existing
-capabilities. Explicit colour-only advertisement and accurate option mapping
-remain future work. Capability and cache repair and the Preview image print-dialog preview are
+capabilities. Accurate mapping of other generic options remains future work. Capability and cache repair and the Preview image print-dialog preview are
 verified. Other applications, PDF preview and physical regression acceptance
 remain pending.
 

@@ -1,0 +1,14 @@
+# Validate only: does not create or print a job.
+{
+    NAME "Virtual printer accepts per-job monochrome PDF"
+    OPERATION Validate-Job
+    GROUP operation-attributes-tag
+    ATTR charset attributes-charset utf-8
+    ATTR language attributes-natural-language en
+    ATTR uri printer-uri $uri
+    ATTR mimeMediaType document-format application/pdf
+    ATTR boolean ipp-attribute-fidelity true
+    GROUP job-attributes-tag
+    ATTR keyword print-color-mode monochrome
+    STATUS successful-ok
+}

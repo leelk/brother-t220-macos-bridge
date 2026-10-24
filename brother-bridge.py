@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse
 import sys
 import subprocess
 import tempfile
@@ -9,7 +10,9 @@ BASE_DIR = Path(__file__).resolve().parent
 CONVERTER = BASE_DIR / "convert-brother.sh"
 PRINTER_QUEUE = "Brother_T220_Test"
 
-def print_document(pdf_path):
+def print_document(pdf_path, color_mode="color"):
+    if color_mode not in ("auto", "color", "monochrome"):
+        raise ValueError(f"Unsupported color mode: {color_mode}")
     pdf_path = Path(pdf_path).expanduser().resolve()
 
     if not pdf_path.is_file():
@@ -23,7 +26,7 @@ def print_document(pdf_path):
 
         print("Converting document...")
         subprocess.run(
-            [str(CONVERTER), str(pdf_path), str(output)],
+            [str(CONVERTER), str(pdf_path), str(output), color_mode],
             check=True
         )
 
@@ -39,12 +42,13 @@ def print_document(pdf_path):
         print("Print job submitted successfully!")
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python3 brother-bridge.py document.pdf")
-        sys.exit(1)
-
+    parser = argparse.ArgumentParser(description="Print a PDF through the Brother bridge")
+    parser.add_argument("document")
+    parser.add_argument("--color-mode", choices=("auto", "color", "monochrome"),
+                        default="color")
+    args = parser.parse_args()
     try:
-        print_document(sys.argv[1])
+        print_document(args.document, args.color_mode)
     except (OSError, ValueError, RuntimeError,
             subprocess.CalledProcessError) as error:
         print(f"Error: {error}", file=sys.stderr)
