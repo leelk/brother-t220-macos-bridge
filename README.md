@@ -9,7 +9,7 @@ macOS application -> local IPP printer -> Python bridge
 -> Docker/Ghostscript -> Brother Linux filter -> CUPS USB queue -> printer
 ```
 
-The current configuration produces A4, normal-quality, full-colour output. Colour printing has been physically tested. The virtual printer advertises colour support when launched with the provided script. A previously running monochrome instance and cached Gray-only macOS queue were corrected; visual preview verification remains pending. See [colour preview checks and limitations](docs/COLOR_PREVIEW.md).
+The current configuration produces A4, normal-quality, full-colour output. Colour printing has been physically tested. The virtual printer advertises colour support when launched with the provided script. A previously running monochrome instance and cached Gray-only macOS queue were corrected; the user subsequently confirmed a colour print-dialog preview in Preview with the virtual printer and Default Settings selected. See [colour preview checks and limitations](docs/COLOR_PREVIEW.md).
 
 ## Requirements
 

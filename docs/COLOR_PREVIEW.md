@@ -36,15 +36,22 @@ Check outstanding jobs before restarting. Refresh the virtual queue with
 the command above only after the IPP check passes; preserve custom queue
 settings beforehand. Never delete or recreate the physical USB queue.
 
-## Visual acceptance — still pending
+## Visual acceptance — Preview confirmed
 
-Computer-control permission was unavailable, so no print-dialog preview was
-observed. Reopen Preview, open a known coloured PDF, press Cmd+P, choose
-Brother_T220_Virtual, and select a fresh/default preset with colour enabled.
-Check red/green/blue areas in the print-dialog thumbnail. Repeat in another
-application. Cancel to avoid printing. Report whether both remain coloured.
-A final physical test requires the USB printer connected and powered on;
-physical colour was previously confirmed by the user, not repeated here.
+On 2026-10-24, the user supplied a screenshot of Preview's Cmd+P dialog
+showing a colour photograph in the print thumbnail, with Brother DCP-T220
+Virtual selected and the Default Settings preset. This confirms the reported
+monochrome preview issue is resolved in Preview for that image.
+Computer-control permission was unavailable during the earlier agent check;
+visual verification is based on the user's screenshot and confirmation.
+A second application and a coloured PDF have not been checked visually.
+
+For further checks, reopen an application, open a known coloured document,
+press Cmd+P, choose Brother_T220_Virtual and use a fresh/default preset with
+colour enabled. Check coloured areas in the print-dialog thumbnail, then
+cancel to avoid printing. A physical regression test requires the USB printer
+connected and powered on; physical colour was previously confirmed by the
+user, but was not repeated after this repair.
 
 ## Limits
 
@@ -55,8 +62,9 @@ options. Monochrome selection is therefore not implemented end to end.
 The `-a` option loads a replacement attribute profile, rather than a small
 additive override; no partial profile was introduced to risk losing existing
 capabilities. Explicit colour-only advertisement and accurate option mapping
-remain future work. Capability and cache repair is verified; visual preview
-and physical regression acceptance remain pending.
+remain future work. Capability and cache repair and the Preview image print-dialog preview are
+verified. Other applications, PDF preview and physical regression acceptance
+remain pending.
 
 Reference: [Apple ippeveprinter source](https://github.com/apple/cups/blob/master/tools/ippeveprinter.c)
 and the installed `man ippeveprinter` (`-s speed,color-speed`).
