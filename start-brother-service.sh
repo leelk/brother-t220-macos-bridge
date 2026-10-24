@@ -3,6 +3,8 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+# The nonzero second speed enables IPP color capabilities. Restart the running
+# service AND refresh the driverless queue after changing these options.
 exec /usr/bin/ippeveprinter \
     -p 8631 \
     -M Brother \

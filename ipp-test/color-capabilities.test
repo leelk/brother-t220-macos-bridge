@@ -1,0 +1,15 @@
+# Read-only: never submits a document or uses the USB queue.
+{
+    NAME "Virtual printer advertises color and accepts PDF"
+    OPERATION Get-Printer-Attributes
+    GROUP operation-attributes-tag
+    ATTR charset attributes-charset utf-8
+    ATTR language attributes-natural-language en
+    ATTR uri printer-uri $uri
+    ATTR keyword requested-attributes color-supported,print-color-mode-supported,print-color-mode-default,document-format-supported
+    STATUS successful-ok
+    EXPECT color-supported OF-TYPE boolean WITH-VALUE true
+    EXPECT print-color-mode-supported OF-TYPE keyword WITH-VALUE color
+    EXPECT print-color-mode-default OF-TYPE keyword WITH-VALUE "/^(auto|color)$/"
+    EXPECT document-format-supported OF-TYPE mimeMediaType WITH-VALUE application/pdf
+}
