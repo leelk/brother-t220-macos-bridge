@@ -50,12 +50,16 @@ for i, arg in enumerate(args):
         self.pdf = self.base / 'document with spaces.pdf'
         self.pdf.write_bytes(b'%PDF-1.4\nmock input; Docker is stubbed\n')
 
-    def run_job(self, mode=None, default=None):
+    def run_job(self, mode=None, default=None, quality=None, quality_default=None):
         env = self.env.copy()
         if mode is not None:
             env['IPP_PRINT_COLOR_MODE'] = mode
         if default is not None:
             env['IPP_PRINT_COLOR_MODE_DEFAULT'] = default
+        if quality is not None:
+            env['IPP_PRINT_QUALITY'] = quality
+        if quality_default is not None:
+            env['IPP_PRINT_QUALITY_DEFAULT'] = quality_default
         return subprocess.run(['bash', str(self.base / 'ipp-test/print-job.sh'),
                                str(self.pdf)], env=env, capture_output=True)
 
@@ -86,6 +90,43 @@ for i, arg in enumerate(args):
                                 env=self.env, capture_output=True)
         self.assertNotEqual(result.returncode, 0)
         self.assertFalse(self.submissions.exists())
+
+    def test_quality_modes_and_color_isolation(self):
+        for quality, expected in [(None, 'Normal'), ('draft', 'Draft'),
+                                  ('3', 'Draft'), ('normal', 'Normal'),
+                                  ('4', 'Normal'), ('high', 'Fine'), ('5', 'Fine'),
+                                  ('normal', 'Normal')]:
+            for color, vendor_color in [('color', 'FullColor'), ('monochrome', 'Mono')]:
+                with self.subTest(quality=quality, color=color):
+                    self.capture.unlink(missing_ok=True)
+                    result = self.run_job(color, quality=quality)
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    rc = self.capture.read_text()
+                    self.assertIn('BRResolution=' + expected + '\n', rc)
+                    self.assertIn('BRMonoColor=' + vendor_color + '\n', rc)
+                    self.assertEqual(self.rc.read_text(), self.original)
+
+    def test_quality_default_and_override(self):
+        self.assertEqual(self.run_job(quality_default='high').returncode, 0)
+        self.assertIn('BRResolution=Fine', self.capture.read_text())
+        self.capture.unlink()
+        self.assertEqual(self.run_job(quality='draft', quality_default='high').returncode, 0)
+        self.assertIn('BRResolution=Draft', self.capture.read_text())
+
+    def test_invalid_quality_does_not_convert_or_submit(self):
+        self.assertNotEqual(self.run_job(quality='invalid').returncode, 0)
+        self.assertFalse(self.capture.exists())
+        self.assertFalse(self.submissions.exists())
+        for command in [
+            ['bash', str(self.base / 'convert-brother.sh'), str(self.pdf),
+             str(self.base / 'out.prn'), 'color', 'invalid'],
+            ['/usr/bin/python3', str(self.base / 'brother-bridge.py'),
+             str(self.pdf), '--quality', 'invalid'],
+        ]:
+            result = subprocess.run(command, env=self.env, capture_output=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertFalse(self.capture.exists())
+            self.assertFalse(self.submissions.exists())
 
     def test_direct_converter_keeps_color_default(self):
         result = subprocess.run(['bash', str(self.base / 'convert-brother.sh'),

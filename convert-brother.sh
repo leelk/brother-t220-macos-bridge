@@ -1,8 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]; then
-    echo "Usage: $0 input.pdf output.prn [auto|color|monochrome]"
+if [ "$#" -lt 2 ] || [ "$#" -gt 4 ]; then
+    echo "Usage: $0 input.pdf output.prn [auto|color|monochrome] [draft|normal|high]"
     exit 1
 fi
 
@@ -10,6 +10,13 @@ case "${3:-color}" in
     auto|color) BROTHER_COLOR=FullColor ;;
     monochrome) BROTHER_COLOR=Mono ;;
     *) echo "Error: Unsupported color mode" >&2; exit 1 ;;
+esac
+
+case "${4:-normal}" in
+    draft|3) BROTHER_QUALITY=Draft ;;
+    normal|4) BROTHER_QUALITY=Normal ;;
+    high|5) BROTHER_QUALITY=Fine ;;
+    *) echo "Error: Unsupported quality" >&2; exit 1 ;;
 esac
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -37,10 +44,10 @@ trap 'rm -rf "$TMPDIR_JOB"' EXIT
 
 cp "$INPUT" "$TMPDIR_JOB/document"
 # Keep Brother's original configuration untouched. The bridge currently
-# targets A4 and normal quality; colour mode is isolated to this job.
+# targets A4; quality and colour mode are isolated to this job.
 sed \
     -e 's/^PageSize=.*/PageSize=A4/' \
-    -e 's/^BRResolution=.*/BRResolution=Normal/' \
+    -e "s/^BRResolution=.*/BRResolution=$BROTHER_QUALITY/" \
     -e "s/^BRMonoColor=.*/BRMonoColor=$BROTHER_COLOR/" \
     "$RCFILE" > "$TMPDIR_JOB/printer.rc"
 

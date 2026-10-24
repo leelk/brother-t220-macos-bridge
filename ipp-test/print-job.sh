@@ -16,9 +16,17 @@ case "$COLOR_MODE" in
     *) echo "ERROR: Unsupported print-color-mode" >&2; exit 1 ;;
 esac
 
+QUALITY="${IPP_PRINT_QUALITY:-${IPP_PRINT_QUALITY_DEFAULT:-normal}}"
+case "$QUALITY" in
+    draft|3) QUALITY=draft ;;
+    normal|4) QUALITY=normal ;;
+    high|5) QUALITY=high ;;
+    *) echo "ERROR: Unsupported print-quality" >&2; exit 1 ;;
+esac
+
 {
     echo "=== Print job: $(date) ==="
     echo "Input: $1"
-    /usr/bin/python3 "$BASE/brother-bridge.py" "$1" --color-mode "$COLOR_MODE"
+    /usr/bin/python3 "$BASE/brother-bridge.py" "$1" --color-mode "$COLOR_MODE" --quality "$QUALITY"
     echo "=== Job submitted ==="
 } >> "$LOG" 2>&1

@@ -57,9 +57,10 @@ user, but was not repeated after this repair.
 
 The installed ippeveprinter built-in colour profile uses default `auto`
 and also advertises monochrome and generic quality/media options. The
-converter remains fixed to A4 and Normal. Per-job monochrome selection is
+converter remains fixed to A4. Draft/Normal/High now map to vendor
+Draft/Normal/Fine per job. Per-job monochrome selection is
 now forwarded to the vendor Mono setting; colour/auto retain FullColor.
-Physical grayscale output still requires verification. Other generic options
+Physical grayscale output and quality improvement still require verification. Other generic options
 are not mapped.
 The `-a` option loads a replacement attribute profile, rather than a small
 additive override; no partial profile was introduced to risk losing existing

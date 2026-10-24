@@ -10,9 +10,11 @@ BASE_DIR = Path(__file__).resolve().parent
 CONVERTER = BASE_DIR / "convert-brother.sh"
 PRINTER_QUEUE = "Brother_T220_Test"
 
-def print_document(pdf_path, color_mode="color"):
+def print_document(pdf_path, color_mode="color", quality="normal"):
     if color_mode not in ("auto", "color", "monochrome"):
         raise ValueError(f"Unsupported color mode: {color_mode}")
+    if quality not in ("draft", "normal", "high"):
+        raise ValueError(f"Unsupported quality: {quality}")
     pdf_path = Path(pdf_path).expanduser().resolve()
 
     if not pdf_path.is_file():
@@ -26,7 +28,7 @@ def print_document(pdf_path, color_mode="color"):
 
         print("Converting document...")
         subprocess.run(
-            [str(CONVERTER), str(pdf_path), str(output), color_mode],
+            [str(CONVERTER), str(pdf_path), str(output), color_mode, quality],
             check=True
         )
 
@@ -46,9 +48,11 @@ if __name__ == "__main__":
     parser.add_argument("document")
     parser.add_argument("--color-mode", choices=("auto", "color", "monochrome"),
                         default="color")
+    parser.add_argument("--quality", choices=("draft", "normal", "high"),
+                        default="normal")
     args = parser.parse_args()
     try:
-        print_document(args.document, args.color_mode)
+        print_document(args.document, args.color_mode, args.quality)
     except (OSError, ValueError, RuntimeError,
             subprocess.CalledProcessError) as error:
         print(f"Error: {error}", file=sys.stderr)

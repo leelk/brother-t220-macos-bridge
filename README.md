@@ -9,7 +9,7 @@ macOS application -> local IPP printer -> Python bridge
 -> Docker/Ghostscript -> Brother Linux filter -> CUPS USB queue -> printer
 ```
 
-The current configuration produces A4, normal-quality output, with full colour by default and per-job grayscale support. Colour printing has been physically tested. The virtual printer advertises colour support when launched with the provided script. A previously running monochrome instance and cached Gray-only macOS queue were corrected; the user subsequently confirmed a colour print-dialog preview in Preview with the virtual printer and Default Settings selected. See [colour preview checks and limitations](docs/COLOR_PREVIEW.md).
+The current configuration produces A4 output with selectable Draft, Normal or High quality, full colour by default, and per-job grayscale support. Colour printing has been physically tested. The virtual printer advertises colour support when launched with the provided script. A previously running monochrome instance and cached Gray-only macOS queue were corrected; the user subsequently confirmed a colour print-dialog preview in Preview with the virtual printer and Default Settings selected. See [colour preview checks and limitations](docs/COLOR_PREVIEW.md).
 
 ## Requirements
 
@@ -143,10 +143,49 @@ still require verification: print a coloured document in grayscale, then in
 colour and confirm the second job stays coloured. No physical grayscale test
 has been performed. No claim is made about exclusive black-ink use.
 
+## Print quality
+
+Cmd+P **High** now selects Brother **Fine** mode. Previously every selection
+was forced to Normal. Draft selects Draft; Normal and missing selections
+select Normal. Numeric IPP values 3/4/5 and keyword values are handled, with
+per-job configuration isolation. Colour/grayscale selection is independent.
+No service restart or queue re-registration is required for this change.
+
+```sh
+# These commands print:
+lp -d Brother_T220_Virtual -o print-quality=5 document.pdf
+python3 brother-bridge.py document.pdf --quality high
+# Convert without printing:
+./convert-brother.sh document.pdf document.prn color high
+# Validate advertised choices and High requests without printing:
+ipptool -tv ipp://localhost:8631/ipp/print ipp-test/quality-job.test
+```
+
+Seven automated tests cover defaults, keyword/numeric quality modes,
+colour/grayscale combinations, invalid values and unchanged vendor settings.
+Local conversion-only checks using the real Docker/Brother filter produced
+nonempty, distinct Draft/Normal/Fine output streams from the same one-page
+test PDF; no jobs were submitted. Original vendor configuration checksums
+matched before and after. This confirms selection reaches the converter,
+not that physical quality has been visually verified.
+
+The existing 300 dpi RGB raster and page geometry are preserved, consistent
+with the installed vendor wrapper's input resolution. Fine is a vendor print
+mode, not a promise of increased input dpi. The generic virtual service still
+advertises 600 dpi, which is not the bridge's actual PDF raster resolution.
+Changing that profile or raster geometry requires separate scale/detail tests.
+Paper/media mapping is also not implemented; the generic photo-media choices
+must not be treated as validated photo-paper support.
+
+To finish verification, print the same document with fine text, linework and
+colour detail at Normal and High on suitable paper, then check detail, margins
+and scale. Repeat High in grayscale and switch back to Normal/colour. Physical
+improvement remains unverified until this comparison is performed.
+
 ## Current limitations
 
 - Docker Desktop and the local IPP service must be running.
-- A4 and normal quality are currently fixed in the converter. Colour or grayscale can be selected per job.
+- A4 is currently fixed in the converter. Quality and colour/grayscale can be selected per job.
 - Duplex and print-dialog option mapping are not implemented.
 - Multipage output is implemented page-by-page but needs broader physical testing.
 - This is an independent experimental project, not an official Brother product.

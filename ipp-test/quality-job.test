@@ -1,0 +1,29 @@
+# Read-only capability check followed by validation; never creates a print job.
+{
+    NAME "Quality choices are advertised"
+    OPERATION Get-Printer-Attributes
+    GROUP operation-attributes-tag
+    ATTR charset attributes-charset utf-8
+    ATTR language attributes-natural-language en
+    ATTR uri printer-uri $uri
+    ATTR keyword requested-attributes print-quality-default,print-quality-supported
+    STATUS successful-ok
+    EXPECT print-quality-default OF-TYPE enum WITH-VALUE 4
+    EXPECT print-quality-supported OF-TYPE enum WITH-VALUE 3
+    EXPECT print-quality-supported OF-TYPE enum WITH-VALUE 4
+    EXPECT print-quality-supported OF-TYPE enum WITH-VALUE 5
+}
+{
+    NAME "High quality PDF request is accepted"
+    OPERATION Validate-Job
+    GROUP operation-attributes-tag
+    ATTR charset attributes-charset utf-8
+    ATTR language attributes-natural-language en
+    ATTR uri printer-uri $uri
+    ATTR mimeMediaType document-format application/pdf
+    ATTR boolean ipp-attribute-fidelity true
+    GROUP job-attributes-tag
+    ATTR enum print-quality 5
+    ATTR keyword print-color-mode color
+    STATUS successful-ok
+}
