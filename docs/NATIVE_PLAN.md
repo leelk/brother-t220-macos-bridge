@@ -21,6 +21,11 @@ This plan supersedes forward-looking guidance in IMPLEMENTATION_PLAN.md for nati
 9. [Milestones and ordered issue backlog](NATIVE_BACKLOG.md)
 10. [First read-only milestone findings](NATIVE_M0_FINDINGS.md)
 
+11. [M1 provenance and public research findings](NATIVE_M1_FINDINGS.md)
+12. [Candidate dependency/license ledger](NATIVE_DEPENDENCIES.md)
+13. [Conditional architecture ADR](NATIVE_ADR_001.md)
+14. [Controlled oracle experiment specification](NATIVE_ORACLE_EXPERIMENTS.md)
+
 ## Required outcomes
 
 Cmd+P from Preview and a second application; colour preview consistent with colour selection and supported capabilities; colour/monochrome; independent per-job Draft/Normal/Fine (standard IPP High maps to Fine); A4/Letter; ordered multipage PDF jobs; USB; automatic launchd startup; recoverable updates and uninstall/rollback. Accurate preview means correct source colours, geometry and selected mode within normal display limitations, not an unqualified screen-to-paper colourimetric guarantee. Physical colour accuracy needs separately measured profiling.

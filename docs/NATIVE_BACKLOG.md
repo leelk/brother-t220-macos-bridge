@@ -1,6 +1,6 @@
 # Milestones and step-by-step issue backlog
 
-Status 2026-10-25: M0 initial inspection performed; M1–M6 pending. These are issue-ready task specifications, not GitHub issues already created. Owner defaults to project maintainer; license selection and release credentials require owner input when reached.
+Status 2026-10-25: M0 initial inspection performed; M1 public/licensing research partially performed; M2–M6 pending. See NATIVE_M1_FINDINGS.md for unresolved gates. These are issue-ready task specifications, not GitHub issues already created. Owner defaults to project maintainer; license selection and release credentials require owner input when reached.
 
 ## M0 — read-only inventory (first safe milestone)
 
