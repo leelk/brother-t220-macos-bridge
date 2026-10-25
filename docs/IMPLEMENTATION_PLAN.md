@@ -1,5 +1,7 @@
 # Brother DCP-T220 bridge: implementation roadmap
 
+> Historical Docker roadmap (2026-10-24): baseline assertions below predate colour/quality changes. See [native plan](NATIVE_PLAN.md) for current native work and README for fallback behavior.
+
 Status: proposed implementation; no runtime changes in this document.
 Date: 2026-10-24. Baseline: `17e6423`.
 
