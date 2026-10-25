@@ -32,7 +32,7 @@ Acceptance: decoded semantics and 12-mode coverage explained, framing/trailers v
 ## M3 — native integration spike (after M2 framing review; file-sink work may follow M1 independently)
 
 - T30: build pinned PAPPL/dependencies arm64 with license notices; prove file-sink raster job.
-- T31: implement immutable ticket normalization and truthful capability tests for media/colour/quality.
+- T31 (partial): native ticket normalization CLI implemented and 29 contract checks pass; IPP callback integration, immutable handoff and truthful capability tests remain pending. See NATIVE_PROGRESS.md.
 - T32: compare renderer/input options and USB backends; record ADR with permissions and deployment target.
 - T33: implement serialized transport, partial-write/cancel/disconnect handling; reviewed minimal physical test.
 - T34: test loopback driverless queue and Preview/second-app option propagation.

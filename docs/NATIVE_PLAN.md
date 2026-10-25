@@ -1,6 +1,6 @@
 # Native DCP-T220 delivery plan
 
-Date: 2026-10-25. Status: planning; native implementation has not begun. Baseline: `958606860eb9e9d08cccdbbbd64a1a60a53161ca`.
+Date: 2026-10-25. Status: early native prototype; settings validation only, no driver/service/installer. Baseline: `958606860eb9e9d08cccdbbbd64a1a60a53161ca`.
 
 ## Scope and authority
 
@@ -25,6 +25,8 @@ This plan supersedes forward-looking guidance in IMPLEMENTATION_PLAN.md for nati
 12. [Candidate dependency/license ledger](NATIVE_DEPENDENCIES.md)
 13. [Conditional architecture ADR](NATIVE_ADR_001.md)
 14. [Controlled oracle experiment specification](NATIVE_ORACLE_EXPERIMENTS.md)
+
+15. [Native implementation progress](NATIVE_PROGRESS.md)
 
 ## Required outcomes
 
