@@ -17,3 +17,11 @@ No vendor code copied/executed, no print submission, queue/service installation 
 ## Delivery order
 
 Finish provenance/public research and generate owned fixtures → independent protocol decoder/encoder → native raster/file-sink IPP prototype → serialized USB and physical tests → launchd/package/rollback → signing/notarization and clean-Mac acceptance. Packaging is a delivery gate for a functioning native path, not a substitute for it.
+
+## Raster-input and source fixture checkpoint — 2026-10-25
+
+Added native/ppm_reader.hpp, raster_check.cpp, generate_raster.py and test_raster.py. This begins T20 (owned synthetic raster patterns) and the bounded raster-input interface portion of T40 without depending on vendor execution. It does not decode or encode Brother commands. See native/README.md for exact input restrictions and consumer safety boundaries.
+
+Validation: arm64 C++17 build with strict warnings, AddressSanitizer and UndefinedBehaviorSanitizer passed 27 raster integration checks plus deterministic fixture regeneration and independent payload hash comparisons. Coverage includes six patterns, odd dimensions, a partial final band, initial payload whitespace/hash bytes, malformed/oversized/truncated input, trailing data, missing file and A4-sized input. The 2480×3507 fixture carries 26,092,080 RGB bytes in 28 bands, largest 952,320 bytes. This is observed buffer sizing, not total memory/CPU benchmarking. Existing 29 ticket checks and seven mocked fallback tests also passed.
+
+No generated fixtures, executables or logs are committed. No printer, vendor binary, Docker process, service or queue was used or changed. M1 provenance/current terms, native protocol research, PDF/IPP integration, USB transport and signed package gates remain open. T20/T40 remain partial; fixtures do not yet cover the full planned matrix.

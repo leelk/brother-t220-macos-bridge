@@ -22,7 +22,7 @@ Acceptance: rights/provenance ledger and dependency audit reviewed; explicit go/
 
 ## M2 — protocol characterization (after M1 gate)
 
-- T20: implement source fixture generators F01–F06 and manifest schema; keep generated artifacts ignored.
+- T20 (partial): six deterministic raster patterns and SHA-256 source/file manifests implemented; PDF/text/geometry/multipage fixtures and full manifest schema remain pending. See NATIVE_PROGRESS.md.
 - T21: run permitted conversion-only local oracle experiments with repeatability controls and private outputs.
 - T22: write original protocol observations with confidence and coverage; distinguish known from guessed fields.
 - T23: build independent decoder/validator, establish page/job framing, channels, compression and each quality/media mode.
@@ -41,7 +41,7 @@ Acceptance: native service receives Cmd+P jobs into file sink; correct 12-mode t
 
 ## M4 — independent streaming encoder and fidelity (after M2/M3)
 
-- T40: implement geometry and band interface with checked bounds.
+- T40 (partial): restricted P6 reader with checked dimensions/payload limits and synchronous 128-row interface implemented; media geometry, cancellation and production raster formats remain pending.
 - T41: implement observed colour/halftone/packing/compression and job/page framing independently.
 - T42: add decoder round trips, fuzz/sanitizer/error/cancellation tests and per-job isolation.
 - T43: execute 12-mode physical matrix, multipage/order/scale and UI preview tests.
