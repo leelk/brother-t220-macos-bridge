@@ -1,0 +1,30 @@
+#!/bin/sh
+# SPDX-License-Identifier: Apache-2.0
+set -eu
+PATH=/usr/bin:/bin:/usr/sbin:/sbin
+export PATH
+if [ "$(uname -m)" != arm64 ]; then echo 'This experimental package requires Apple Silicon.' >&2; exit 1; fi
+major=$(sw_vers -productVersion | cut -d. -f1)
+if [ "$major" -lt 14 ]; then echo 'This build requires macOS 14 or newer; only the current development Mac is tested.' >&2; exit 1; fi
+if [ "${3:-/}" != / ]; then echo 'Install only onto the running macOS system.' >&2; exit 1; fi
+for queue in Brother_T220_Native Brother_T220_Test Brother_T220_Virtual; do
+    jobs=$(lpstat -W not-completed -o "$queue" 2>/dev/null || true)
+    if [ -n "$jobs" ]; then echo 'Unfinished Brother jobs must be resolved before installation.' >&2; exit 1; fi
+done
+state='/Library/Application Support/leelk/BrotherT220'
+install -d -o root -g wheel -m 700 "$state"
+# Refuse symlink state destinations rather than following administrator-controlled paths accidentally.
+for name in previous.ppd previous-uri; do
+    if [ -L "$state/$name" ]; then echo 'Unexpected symbolic link in native rollback state.' >&2; exit 1; fi
+done
+# Keep the most recent different-version predecessor; same-version repair must not overwrite it.
+current=/etc/cups/ppd/Brother_T220_Native.ppd
+if [ -f "$current" ] && ! grep -q '/Library/Printers/leelk/BrotherT220/versions/' "$current"; then
+    echo 'The native queue name belongs to another driver. No files were replaced.' >&2; exit 1
+fi
+if [ -f "$current" ] && ! grep -q '/versions/0.1.0/' "$current"; then
+    cp "$current" "$state/previous.ppd"
+    lpstat -v Brother_T220_Native | sed 's/^[^:]*: //' > "$state/previous-uri"
+    chmod 600 "$state/previous.ppd" "$state/previous-uri"
+fi
+exit 0

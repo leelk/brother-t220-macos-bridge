@@ -1,6 +1,6 @@
 # Architecture and alternatives
 
-Status: proposed, gated by research. See NATIVE_PLAN.md for scope.
+Status: long-term proposal. The first experimental package uses native CUPS integration selected in NATIVE_ADR_002.md; PAPPL is not yet implemented. See NATIVE_PLAN.md for scope.
 
 ## Preferred data path
 

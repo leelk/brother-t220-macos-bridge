@@ -1,6 +1,6 @@
 # Native prototype
 
-Status: settings and raster-input prototypes only; no printer driver, service or installer yet.
+Status: experimental native CUPS filter and local development pkg now exist; see [installation/status](../docs/NATIVE_INSTALLATION.md). No hardware or installed-system acceptance yet. The settings/raster tools below remain development components.
 The C++17 ticket checker validates settings and emits normalized JSON for development. It does not open a document, contact a service or write to USB. Runtime uses system C++ libraries only; Python is used only for development tests. Missing options use A4/colour/Normal. Explicit unsupported values, repeated options and malformed requests fail with exit 2 and no success output. IPP High maps to Fine; input dpi is intentionally unspecified. The JSON is a diagnostic CLI format, not an IPP implementation.
 
 Build and test from repository root (generated executable stays outside Git):
@@ -39,3 +39,20 @@ python3 native/generate_raster.py /private/tmp/brother-patches.ppm --pattern pat
 ```
 
 Reference for the restricted fixture container: [Netpbm PPM specification](https://netpbm.sourceforge.net/doc/ppm.html), reviewed 2026-10-25. Full PPM supports variants this prototype deliberately rejects.
+
+## Native CUPS filter and installer
+
+`cups_filter.cpp` accepts CUPS raster from macOS cgpdftoraster, validates media/colour/quality/geometry, restores the imageable rectangle on a white full-page raster and emits observed PJL framing plus standard PWG Raster. It uses one row of input/output buffers and a private anonymous disk staging file capped at 512 MiB, validating the job before any backend output. Maximum 1000 input pages and 99 copies, with aggregate output bounded to 512 MiB. Cancellation is checked while converting/copying; transport outcomes after partial output remain uncertain and the setup queue uses abort-job rather than automatic retries. Error messages exclude user titles/paths. No calibrated colour or black-ink-only claim.
+
+The PPD exposes plain, one-sided A4/Letter, colour/monochrome and Draft/Normal/Fine at 300 dpi. Setup uses a separate native queue and never prints automatically. Legacy PPD integration is an interim choice, not PAPPL/IPP completion. See ADR 002.
+
+```sh
+xcrun clang++ -std=c++17 -arch arm64 -mmacosx-version-min=14.0 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -fno-omit-frame-pointer native/cups_filter.cpp -lcups -o /private/tmp/brother-t220-native-asan
+xcrun clang++ -std=c++17 -arch arm64 -O2 -Wall -Wextra -Werror -pedantic native/inspect_test_prn.cpp -lcups -o /private/tmp/brother-inspect-test-prn
+PYTHONDONTWRITEBYTECODE=1 python3 native/test_cups_pipeline.py /private/tmp/brother-t220-native-asan /private/tmp/brother-inspect-test-prn
+PYTHONDONTWRITEBYTECODE=1 python3 native/test_setup_helper.py
+native/packaging/build-pkg.sh
+PYTHONDONTWRITEBYTECODE=1 python3 native/test_package.py native/dist/Brother-T220-Native-0.1.0-development.pkg
+```
+
+`generate_pdf.py` is an owned two-page vector PDF fixture generator. `ppm_to_test_raster.cpp` bridges owned PPM fixtures into CUPS raster for development comparisons. `inspect_test_prn.cpp` is only a synthetic-fixture decoder/inspector, not a general security parser and not shipped. Tests never call lp, create a real queue or print. The installed runtime has no Python, Docker, Homebrew or vendor-binary dependency.

@@ -1,6 +1,6 @@
 # Milestones and step-by-step issue backlog
 
-Status 2026-10-25: M0 initial inspection performed; M1 public/licensing research partially performed; M2–M6 pending. See NATIVE_M1_FINDINGS.md for unresolved gates. These are issue-ready task specifications, not GitHub issues already created. Owner defaults to project maintainer; license selection and release credentials require owner input when reached.
+Status 2026-10-25: M0 initial inspection performed; M1 provenance/terms resolved for scoped conversion experiments; native CUPS development candidate built. M2–M5 have partial offline evidence, not release acceptance. See NATIVE_RELEASE_STATUS.md and ADR 002; PAPPL integration and physical/signed-release gates remain pending. These are issue-ready task specifications, not GitHub issues already created. Owner defaults to project maintainer; license selection and release credentials require owner input when reached.
 
 ## M0 — read-only inventory (first safe milestone)
 
@@ -13,7 +13,7 @@ Acceptance: clean initial baseline identified, implementation limits stated, sev
 
 ## M1 — legal/public research and feasibility (after M0)
 
-- T10: locate exact Brother package source/license and provenance; record hash and permitted analysis boundaries.
+- T10: scoped source/license/provenance inventory completed; official package matched, current terms reviewed. See NATIVE_PROTOCOL_FINDINGS.md.
 - T11: select repository license with owner; audit candidate dependencies and notices.
 - T12: inspect public protocol/open driver support for exact model; compare alternatives and record ADR.
 - T13: write controlled oracle experiment specification with allowed techniques, fixtures and review gates.
@@ -23,7 +23,7 @@ Acceptance: rights/provenance ledger and dependency audit reviewed; explicit go/
 ## M2 — protocol characterization (after M1 gate)
 
 - T20 (partial): six deterministic raster patterns and SHA-256 source/file manifests implemented; PDF/text/geometry/multipage fixtures and full manifest schema remain pending. See NATIVE_PROGRESS.md.
-- T21: run permitted conversion-only local oracle experiments with repeatability controls and private outputs.
+- T21 (partial): small and full-page 12-mode conversion-only experiments completed, private artifacts retained; broader pattern/repeatability corpus pending.
 - T22: write original protocol observations with confidence and coverage; distinguish known from guessed fields.
 - T23: build independent decoder/validator, establish page/job framing, channels, compression and each quality/media mode.
 
@@ -42,7 +42,7 @@ Acceptance: native service receives Cmd+P jobs into file sink; correct 12-mode t
 ## M4 — independent streaming encoder and fidelity (after M2/M3)
 
 - T40 (partial): restricted P6 reader with checked dimensions/payload limits and synchronous 128-row interface implemented; media geometry, cancellation and production raster formats remain pending.
-- T41: implement observed colour/halftone/packing/compression and job/page framing independently.
+- T41 (partial): standard system PWG encoder plus independently authored observed PJL framing implemented; 12 full-page swatch decoded pixel comparisons pass. Physical acceptance and broader corpus pending; no custom proprietary compression needed.
 - T42: add decoder round trips, fuzz/sanitizer/error/cancellation tests and per-job isolation.
 - T43: execute 12-mode physical matrix, multipage/order/scale and UI preview tests.
 - T44: benchmark cold/warm/idle/endurance and fix budget failures.
@@ -53,7 +53,7 @@ Acceptance: all converter, physical and performance gates in linked plans pass; 
 
 - T50: finalize service account/LaunchDaemon or scoped LaunchAgent ADR; prove USB and renderer access.
 - T51: implement app/setup, private spool, bounded diagnostics, health and backoff.
-- T52: implement versioned pkg scripts, transactional upgrade journal, uninstall and rollback.
+- T52 (partial): development pkg, setup app, pending-job/ownership guards and saved prior-queue rollback implemented; 17 mocked helper scenarios pass. Full uninstall, transactional upgrade journal and installed-system recovery acceptance pending.
 - T53: sign with Developer ID identities, notarize, staple, verify and archive reproducible release metadata privately.
 - T54: test clean Mac install/reboot/update/failed update/uninstall/fallback recovery.
 

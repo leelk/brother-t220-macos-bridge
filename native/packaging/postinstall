@@ -1,0 +1,11 @@
+#!/bin/sh
+# SPDX-License-Identifier: Apache-2.0
+set -eu
+# No daemon, startup app or test print. CUPS starts the native filter on demand.
+helper=/Library/Printers/leelk/BrotherT220/manage-driver.sh
+if ! "$helper" configure-if-connected; then
+    # Payload is usable even when a disconnected/busy printer prevents queue setup.
+    # Do not claim a transactional queue upgrade succeeded; retain rollback state.
+    echo 'Driver files installed; printer setup is pending. Open Brother T220 Native Setup after resolving jobs/USB connection.' >&2
+fi
+exit 0

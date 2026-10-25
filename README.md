@@ -2,6 +2,12 @@
 
 This experimental bridge enables normal macOS **Cmd + P** PDF printing to a USB-connected Brother DCP-T220. It combines a local IPP printer, Docker, Brother's official Linux conversion filter, and a CUPS USB pass-through queue.
 
+## Native development installer
+
+An experimental **Docker-free native CUPS driver package** is now built locally at `native/dist/Brother-T220-Native-0.1.0-development.pkg`. It includes an Apple Silicon raster filter and a small setup app; macOS starts the filter on demand. The package is unsigned/unnotarized, has not been installed or physically tested, and is not a finished release. See [installation and limits](docs/NATIVE_INSTALLATION.md), [validation status](docs/NATIVE_RELEASE_STATUS.md), and [native design decision](docs/NATIVE_ADR_002.md). Generated packages are intentionally excluded from Git.
+
+The instructions below remain the existing Docker fallback. No fallback runtime files were changed.
+
 ## How it works
 
 ```text

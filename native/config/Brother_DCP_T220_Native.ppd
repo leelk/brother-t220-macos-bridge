@@ -1,0 +1,58 @@
+*PPD-Adobe: "4.3"
+*% SPDX-License-Identifier: Apache-2.0
+*FormatVersion: "4.3"
+*FileVersion: "0.1.0"
+*LanguageVersion: English
+*LanguageEncoding: ISOLatin1
+*PCFileName: "BRT220N.PPD"
+*Manufacturer: "Brother"
+*Product: "(DCP-T220)"
+*ModelName: "Brother DCP-T220 Native Experimental"
+*ShortNickName: "DCP-T220 Native Experimental"
+*NickName: "Brother DCP-T220 Native Experimental 0.1"
+*PSVersion: "(3010.000) 0"
+*ColorDevice: True
+*DefaultColorSpace: RGB
+*FileSystem: False
+*Throughput: "9"
+*LandscapeOrientation: Plus90
+*TTRasterizer: Type42
+*cupsVersion: 2.0
+*cupsManualCopies: True
+*cupsFilter2: "application/vnd.cups-raster application/vnd.cups-raw 0 /Library/Printers/leelk/BrotherT220/versions/0.1.0/brother-t220-native"
+*OpenUI *PageSize/Paper Size: PickOne
+*OrderDependency: 10 AnySetup *PageSize
+*DefaultPageSize: A4
+*PageSize A4/A4: "<</PageSize[595.276 841.890]/ImagingBBox null>>setpagedevice"
+*PageSize Letter/US Letter: "<</PageSize[612 792]/ImagingBBox null>>setpagedevice"
+*CloseUI: *PageSize
+*OpenUI *PageRegion: PickOne
+*OrderDependency: 10 AnySetup *PageRegion
+*DefaultPageRegion: A4
+*PageRegion A4/A4: "<</PageSize[595.276 841.890]/ImagingBBox null>>setpagedevice"
+*PageRegion Letter/US Letter: "<</PageSize[612 792]/ImagingBBox null>>setpagedevice"
+*CloseUI: *PageRegion
+*DefaultImageableArea: A4
+*ImageableArea A4: "8.504 8.504 586.772 833.386"
+*ImageableArea Letter: "8.504 8.504 603.496 783.496"
+*DefaultPaperDimension: A4
+*PaperDimension A4: "595.276 841.890"
+*PaperDimension Letter: "612 792"
+*OpenUI *ColorModel/Color Mode: PickOne
+*OrderDependency: 20 AnySetup *ColorModel
+*DefaultColorModel: RGB
+*ColorModel RGB/Colour: "<</cupsColorSpace 19/cupsColorOrder 0/cupsBitsPerColor 8>>setpagedevice"
+*ColorModel Gray/Monochrome: "<</cupsColorSpace 18/cupsColorOrder 0/cupsBitsPerColor 8>>setpagedevice"
+*CloseUI: *ColorModel
+*OpenUI *PrintQuality/Print Quality: PickOne
+*OrderDependency: 30 AnySetup *PrintQuality
+*DefaultPrintQuality: Normal
+*PrintQuality Draft/Draft: "<</HWResolution[300 300]/cupsInteger8 3>>setpagedevice"
+*PrintQuality Normal/Normal: "<</HWResolution[300 300]/cupsInteger8 4>>setpagedevice"
+*PrintQuality Fine/Fine: "<</HWResolution[300 300]/cupsInteger8 5>>setpagedevice"
+*CloseUI: *PrintQuality
+*DefaultResolution: 300dpi
+*OpenUI *Resolution/Input Resolution: PickOne
+*OrderDependency: 40 AnySetup *Resolution
+*Resolution 300dpi/300 dpi: "<</HWResolution[300 300]>>setpagedevice"
+*CloseUI: *Resolution

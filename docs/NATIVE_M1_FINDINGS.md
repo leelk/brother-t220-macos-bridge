@@ -35,3 +35,7 @@ Brother's [OS support page](https://support.brother.com/g/b/oslist.aspx?c=eu_ot&
 - T13 complete as a specification: NATIVE_ORACLE_EXPERIMENTS.md; no oracle runs executed.
 
 M1 is not accepted as complete. Continue read-only official package/source review and the exact dependency audit. Conversion-only research can follow once provenance/terms are matched and the experiment preflight passes. USB writes, disassembly and vendor redistribution remain outside this step. Docker fallback and all runtime files remain unchanged.
+
+## Subsequent provenance resolution
+
+Later on 2026-10-25, curl retrieval of Brother's details/how-to/current-agreement pages succeeded. The official DEB members match both local archives; scoped conversion-only experiments followed the reviewed grant. See NATIVE_PROTOCOL_FINDINGS.md for exact URL/hash and limits. The original unresolved-provenance statements above describe the earlier checkpoint. The selected project license is Apache-2.0; the current CUPS development candidate bundles no third-party libraries or vendor artifacts. The future PAPPL dependency/build audit remains separate.

@@ -21,3 +21,5 @@
 2026-10-25: retain working Docker fallback unchanged. Prefer PAPPL plus independent arm64 encoder conditionally, not as an established implementation decision. No native converter, pkg, protocol specification or USB backend is verified. No scanner/duplex/photo-media promises. M0 is the only research performed in this change.
 
 At each gate record decision, evidence, alternatives, owner and date. Unknown rights, unsafe framing, destructive commands, unexplained mode differences or unbounded memory prevent advancement to the affected stage. Continue independent documentation/public-source work when a gate is blocked. See NATIVE_BACKLOG.md for dependencies.
+
+2026-10-25 continuation: project license is now Apache-2.0, official reference provenance/current agreement matched and scoped oracle runs completed. Native PWG/PJL CUPS filter and development pkg now exist; earlier no-implementation statements are historical. ADR 002 records the interim legacy integration and its deprecation risk. Signing/notarization, installed-system/visual acceptance, full upgrade/uninstall recovery and authorized physical testing remain open. See NATIVE_RELEASE_STATUS.md.

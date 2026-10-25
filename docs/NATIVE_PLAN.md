@@ -1,6 +1,6 @@
 # Native DCP-T220 delivery plan
 
-Date: 2026-10-25. Status: early native prototype; settings validation only, no driver/service/installer. Baseline: `958606860eb9e9d08cccdbbbd64a1a60a53161ca`.
+Date: 2026-10-25. Status: native CUPS development package built; unsigned/unnotarized, not installed or physically validated. Baseline: `958606860eb9e9d08cccdbbbd64a1a60a53161ca`.
 
 ## Scope and authority
 
@@ -27,6 +27,11 @@ This plan supersedes forward-looking guidance in IMPLEMENTATION_PLAN.md for nati
 14. [Controlled oracle experiment specification](NATIVE_ORACLE_EXPERIMENTS.md)
 
 15. [Native implementation progress](NATIVE_PROGRESS.md)
+
+16. [Protocol/reference findings](NATIVE_PROTOCOL_FINDINGS.md)
+17. [First installable candidate architecture](NATIVE_ADR_002.md)
+18. [Development installer instructions](NATIVE_INSTALLATION.md)
+19. [Candidate validation and remaining release gates](NATIVE_RELEASE_STATUS.md)
 
 ## Required outcomes
 

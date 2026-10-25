@@ -20,3 +20,11 @@ __pycache__/
 .env.*
 *.pem
 *.key
+
+# Native build/install artifacts (source-only repository)
+native/dist/
+native/build/
+*.pkg
+*.dmg
+*.ras
+*.raw
