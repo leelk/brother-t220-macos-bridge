@@ -1,6 +1,6 @@
 # Native DCP-T220 delivery plan
 
-Date: 2026-10-25. Status: native CUPS development package built; unsigned/unnotarized, not installed or physically validated. Baseline: `958606860eb9e9d08cccdbbbd64a1a60a53161ca`.
+Date: 2026-10-25. Status: native CUPS development package built and user-installed; unsigned/unnotarized, queue setup and physical validation pending. Baseline: `958606860eb9e9d08cccdbbbd64a1a60a53161ca`.
 
 ## Scope and authority
 
@@ -32,6 +32,9 @@ This plan supersedes forward-looking guidance in IMPLEMENTATION_PLAN.md for nati
 17. [First installable candidate architecture](NATIVE_ADR_002.md)
 18. [Development installer instructions](NATIVE_INSTALLATION.md)
 19. [Candidate validation and remaining release gates](NATIVE_RELEASE_STATUS.md)
+
+20. [User troubleshooting guide](TROUBLESHOOTING.md)
+21. [Preserved Docker fallback instructions](DOCKER_FALLBACK.md)
 
 ## Required outcomes
 

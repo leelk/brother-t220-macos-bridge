@@ -1,205 +1,115 @@
-# Brother DCP-T220 macOS bridge
+# Brother DCP-T220 for macOS
 
-This experimental bridge enables normal macOS **Cmd + P** PDF printing to a USB-connected Brother DCP-T220. It combines a local IPP printer, Docker, Brother's official Linux conversion filter, and a CUPS USB pass-through queue.
+Experimental native printing support for a USB-connected **Brother DCP-T220** on **Apple Silicon**. The native driver integrates with the macOS print service so applications can print through **Cmd+P**, without Docker or an application running in the background.
 
-## Native development installer
+**Current version: 0.1.0 development.** The package has been installed successfully on the development Mac, but printer setup is incomplete and physical output is not yet verified. The installer is unsigned and not notarized. This is an independent project, not an official Brother driver.
 
-An experimental **Docker-free native CUPS driver package** is now built locally at `native/dist/Brother-T220-Native-0.1.0-development.pkg`. It includes an Apple Silicon raster filter and a small setup app; macOS starts the filter on demand. The package is unsigned/unnotarized, has not been installed or physically tested, and is not a finished release. See [installation and limits](docs/NATIVE_INSTALLATION.md), [validation status](docs/NATIVE_RELEASE_STATUS.md), and [native design decision](docs/NATIVE_ADR_002.md). Generated packages are intentionally excluded from Git.
+[Install and configure](docs/NATIVE_INSTALLATION.md) · [Troubleshooting](docs/TROUBLESHOOTING.md) · [Validation status](docs/NATIVE_RELEASE_STATUS.md) · [Docker fallback](docs/DOCKER_FALLBACK.md)
 
-The instructions below remain the existing Docker fallback. No fallback runtime files were changed.
+## Quick start
 
-## How it works
+1. Obtain the locally built `Brother-T220-Native-0.1.0-development.pkg` and complete the macOS Installer steps.
+2. Connect **one** DCP-T220 by USB and turn it on.
+3. Open **Applications → Brother T220 Native Setup**.
+4. Choose **Add or Refresh Native Printer** and complete the administrator prompt.
+5. Open a document, press **Cmd+P**, and select **Brother_T220_Native**. Review the preview and settings before choosing Print.
 
-```text
-macOS application -> local IPP printer -> Python bridge
--> Docker/Ghostscript -> Brother Linux filter -> CUPS USB queue -> printer
-```
+**An “installation successful” message confirms the software files were installed; it does not guarantee the printer queue was added.** If the printer was unavailable during installation, complete steps 2–4. Setup does not print a test page automatically.
 
-The current configuration produces A4 output with selectable Draft, Normal or High quality, full colour by default, and per-job grayscale support. Colour printing has been physically tested. The virtual printer advertises colour support when launched with the provided script. A previously running monochrome instance and cached Gray-only macOS queue were corrected; the user subsequently confirmed a colour print-dialog preview in Preview with the virtual printer and Default Settings selected. See [colour preview checks and limitations](docs/COLOR_PREVIEW.md).
+The generated installer is located at `native/dist/Brother-T220-Native-0.1.0-development.pkg` on the build Mac. It is excluded from Git and is not included in a source clone. No public binary release is published by these instructions. To create your own package, see [Building from source](#building-from-source).
 
 ## Requirements
 
-- macOS with CUPS and `ippeveprinter`
-- Docker Desktop running
-- Brother DCP-T220 connected over USB
-- Brother's official **Linux printer driver (deb package)** for the DCP-T220
+| Requirement | Native development driver |
+|---|---|
+| Mac | Apple Silicon (`arm64`) |
+| macOS | Installer requires macOS 14 or newer; current testing is on macOS 27.0.1 only |
+| Printer | Brother DCP-T220, connected directly by USB |
+| Setup access | Administrator authorization for installation and queue changes |
+| Runtime dependencies | Built-in macOS print service and system libraries |
+| Package trust | Unsigned/unnotarized development package; no Developer ID release yet |
 
-Brother's driver package and extracted files are deliberately excluded from this repository. Download them directly from Brother and review their license before use.
+Docker, Homebrew, Python, Ghostscript and the Brother Linux driver are **not required by the installed native path**. Source builds and development tests have separate requirements. If macOS blocks an untrusted package or application, stop and follow the project's signing/release process; these instructions do not disable system security protections.
 
-## Setup
+## Features and validation
 
-Clone the repository into any folder, then place the official `.deb` package in that folder and extract it without installing it:
+| Feature | Current implementation | Validation |
+|---|---|---|
+| Normal Cmd+P integration | Native CUPS filter and model PPD | Offline PDF pipeline passes; live print-dialog verification pending |
+| Colour / monochrome | Per-job RGB / single-channel grayscale | Reference conversion and offline tests pass; physical checks pending |
+| Draft / Normal / Fine | Per-job device quality mapping | All three mappings tested; printed quality differences pending |
+| A4 / US Letter | 300 dpi input, media-specific geometry | Both sizes tested offline; physical scale/margins pending |
+| Multipage documents | Ordered page conversion and staged output | Two-page combinations tested; physical/endurance checks pending |
+| USB | Uses the macOS USB print backend | Native hardware delivery pending |
+| Automatic startup | macOS launches the filter on demand | No custom startup process needed; reboot validation pending |
+| Installation | `.pkg` plus a setup app | User installation and installed receipt confirmed; native queue not yet created |
+| Rollback / removal | Saved prior native queue or remove native queue | Mocked scenarios pass; live upgrade/rollback pending |
 
-```bash
-ar -x dcpt220pdrv-3.5.0-1.i386.deb
-mkdir -p extracted
-tar -xzf data.tar.gz -C extracted
+All quality settings use **300 dpi input**. Fine maps to the printer's HIGH mode; it does not change input resolution. The current candidate supports plain-paper, one-sided printing. Scanning, automatic duplex, borderless/photo-media modes, Intel Macs and network printing are outside this candidate's scope. Preview fidelity and calibrated screen-to-paper colour matching are not verified.
+
+## After restarting your Mac
+
+Once **Brother_T220_Native** has been configured, its registration is intended to persist. macOS starts the filter when a job arrives; you do not need Docker, a terminal command, the setup app, or a custom login item. Connect and power on the USB printer before printing.
+
+Restarting does **not** add a missing printer queue. Reboot behavior still needs an observed end-to-end test. See [restart and first-print checks](docs/NATIVE_INSTALLATION.md#after-restarting).
+
+## Native driver and Docker fallback
+
+| Path | Printer to select | Docker required? | Startup |
+|---|---|---|---|
+| Native development driver | `Brother_T220_Native` | No | macOS starts the filter per job |
+| Existing fallback | `Brother_T220_Virtual` | Yes | Start Docker and the bridge service |
+| Fallback USB pass-through | `Brother_T220_Test` | Part of fallback | Internal transport queue; not the normal document-printing choice |
+
+Keep the existing fallback available while testing native output. Avoid simultaneous submissions from both paths to the same USB device. The native installer does not remove or reconfigure the fallback. Complete fallback setup, option mapping and historical colour-preview evidence are retained in the [Docker fallback guide](docs/DOCKER_FALLBACK.md).
+
+## Building from source
+
+On an Apple Silicon development Mac with Xcode and its command-line tools:
+
+```sh
+git clone https://github.com/leelk/brother-t220-macos-bridge.git
+cd brother-t220-macos-bridge
+native/packaging/build-pkg.sh
 ```
 
-The bridge expects this executable to exist afterward:
+Output:
 
 ```text
-extracted/opt/brother/Printers/dcpt220/lpd/x86_64/brdcpt220filter
+native/dist/Brother-T220-Native-0.1.0-development.pkg
 ```
 
-Build the AMD64 conversion image (Apple Silicon uses Docker emulation):
-
-```bash
-docker build --platform linux/amd64 \
-  -f Dockerfile.brother \
-  -t brother-t220-converter:1.0 .
-```
-
-Make the scripts executable:
-
-```bash
-chmod +x convert-brother.sh start-brother-service.sh ipp-test/*.sh
-```
-
-### Create the physical USB pass-through queue
-
-Find the printer URI:
-
-```bash
-lpinfo -v | grep -i brother
-```
-
-Substitute that URI below:
-
-```bash
-sudo lpadmin \
-  -p Brother_T220_Test \
-  -E \
-  -v 'usb://Brother/DCP-T220?serial=YOUR_SERIAL' \
-  -P "$PWD/config/Brother_T220_Test.ppd"
-```
-
-macOS may warn that PPD drivers are deprecated. This queue only carries printer-ready data produced by Brother's filter.
-
-### Start and register the local IPP printer
-
-Start the service and leave it running:
-
-```bash
-./start-brother-service.sh
-```
-
-In another terminal, register it with macOS:
-
-```bash
-sudo lpadmin \
-  -p Brother_T220_Virtual \
-  -E \
-  -v ipp://localhost:8631/ipp/print \
-  -m everywhere
-```
-
-Select **Brother_T220_Virtual** from an application's print dialog.
-
-## Direct tests
-
-Convert a PDF without printing:
-
-```bash
-./convert-brother.sh document.pdf document.prn
-```
-
-Convert and submit a PDF to the USB queue:
-
-```bash
-python3 brother-bridge.py document.pdf
-```
-
-## Grayscale printing
-
-In Cmd+P, select the virtual printer, scroll to **Printer Options** and look
-for **Color Mode**, **Output Mode**, or **Print in Color** (wording varies by
-application). Select **Grayscale** or turn off **Print in Color** for this job.
-The queue exposes RGB and Gray; some applications hide this under a collapsed
-printer-options section. Leave colour enabled for full-colour output.
-
-The bridge forwards IPP `print-color-mode=monochrome` to Brother's `Mono`
-configuration in a temporary per-job file. `color`, `auto`, and missing options
-preserve FullColor. No service restart is required for these script changes.
-
-You can also explicitly submit a grayscale PDF from Terminal (this prints):
+The build creates a development package without installing it or printing. It contains project-owned code and uses system libraries; no Brother binaries are bundled. To inspect the generated package without installation:
 
 ```sh
-lp -d Brother_T220_Virtual -o print-color-mode=monochrome document.pdf
-# Or bypass the virtual queue:
-python3 brother-bridge.py document.pdf --color-mode monochrome
+PYTHONDONTWRITEBYTECODE=1 python3 native/test_package.py native/dist/Brother-T220-Native-0.1.0-development.pkg
 ```
 
-Convert without printing:
+Python is required for development tests only. See [native development instructions](native/README.md) for compiler commands, offline PDF/raster tests and packaging checks. The builder supports configured signing identities but does not implement the complete notarization/stapling workflow.
 
-```sh
-./convert-brother.sh document.pdf document.prn monochrome
-```
+## Documentation
 
-Validation without printing:
+| Guide | Purpose |
+|---|---|
+| [Native installation](docs/NATIVE_INSTALLATION.md) | Package location, setup, printing, restart, removal and rollback |
+| [Troubleshooting](docs/TROUBLESHOOTING.md) | Missing queue, USB detection, stalled jobs and safe diagnostics |
+| [Release status](docs/NATIVE_RELEASE_STATUS.md) | Evidence, test results and outstanding acceptance gates |
+| [Docker fallback](docs/DOCKER_FALLBACK.md) | Existing working bridge and its requirements |
+| [Native development](native/README.md) | Build and test commands, interfaces and bounds |
+| [Planning index](docs/NATIVE_PLAN.md) | Architecture, research, milestones and task backlog |
+| [Current architecture decision](docs/NATIVE_ADR_002.md) | Why the first candidate uses CUPS; long-term IPP/PAPPL work |
+| [Protocol findings](docs/NATIVE_PROTOCOL_FINDINGS.md) | Reference provenance and independently observed format behavior |
 
-```sh
-python3 -m unittest discover -s tests -v
-ipptool -tv ipp://localhost:8631/ipp/print ipp-test/grayscale-job.test
-```
+The native driver currently uses legacy CUPS PPD/filter integration. It is an interim implementation, not the planned driverless IPP/PAPPL application; future macOS compatibility remains a release risk.
 
-Tests cover option forwarding and per-job configuration with mocked Docker
-and printing. Actual grayscale output and the application's grayscale control
-still require verification: print a coloured document in grayscale, then in
-colour and confirm the second job stays coloured. No physical grayscale test
-has been performed. No claim is made about exclusive black-ink use.
+## Reporting a problem
 
-## Print quality
+Check [Troubleshooting](docs/TROUBLESHOOTING.md) first. When reporting an issue, include the driver version, macOS version, Mac architecture, selected queue, media/colour/quality settings, and exact error message. Use synthetic documents where possible and distinguish a preview issue, conversion failure, queue submission, and actual printed output.
 
-Cmd+P **High** now selects Brother **Fine** mode. Previously every selection
-was forced to Normal. Draft selects Draft; Normal and missing selections
-select Normal. Numeric IPP values 3/4/5 and keyword values are handled, with
-per-job configuration isolation. Colour/grayscale selection is independent.
-No service restart or queue re-registration is required for this change.
+Do not publish document contents, printer serial numbers or USB URIs, account information, full spool/log dumps, or signing credentials.
 
-```sh
-# These commands print:
-lp -d Brother_T220_Virtual -o print-quality=5 document.pdf
-python3 brother-bridge.py document.pdf --quality high
-# Convert without printing:
-./convert-brother.sh document.pdf document.prn color high
-# Validate advertised choices and High requests without printing:
-ipptool -tv ipp://localhost:8631/ipp/print ipp-test/quality-job.test
-```
+## Repository policy and license
 
-Seven automated tests cover defaults, keyword/numeric quality modes,
-colour/grayscale combinations, invalid values and unchanged vendor settings.
-Local conversion-only checks using the real Docker/Brother filter produced
-nonempty, distinct Draft/Normal/Fine output streams from the same one-page
-test PDF; no jobs were submitted. Original vendor configuration checksums
-matched before and after. This confirms selection reaches the converter,
-not that physical quality has been visually verified.
+Only source, tests and sanitized documentation belong in Git. Do not commit Brother packages or extracted files, generated installers/PDFs/raster/print streams, spool documents, logs, environment files, credentials or private keys. See [.gitignore](.gitignore).
 
-The existing 300 dpi RGB raster and page geometry are preserved, consistent
-with the installed vendor wrapper's input resolution. Fine is a vendor print
-mode, not a promise of increased input dpi. The generic virtual service still
-advertises 600 dpi, which is not the bridge's actual PDF raster resolution.
-Changing that profile or raster geometry requires separate scale/detail tests.
-Paper/media mapping is also not implemented; the generic photo-media choices
-must not be treated as validated photo-paper support.
-
-To finish verification, print the same document with fine text, linework and
-colour detail at Normal and High on suitable paper, then check detail, margins
-and scale. Repeat High in grayscale and switch back to Normal/colour. Physical
-improvement remains unverified until this comparison is performed.
-
-## Current limitations
-
-- Docker Desktop and the local IPP service must be running.
-- A4 is currently fixed in the converter. Quality and colour/grayscale can be selected per job.
-- Duplex and print-dialog option mapping are not implemented.
-- Multipage output is implemented page-by-page but needs broader physical testing.
-- This is an independent experimental project, not an official Brother product.
-
-## Repository policy
-
-Do not commit Brother's `.deb`, extracted driver files or binaries, generated `.prn`/`.ppm` files, spool documents, logs, credentials, keys, or local environment files. The included `.gitignore` excludes them.
-
-## License
-
-Original project code and documentation are licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE). This does not license Brother software or other third-party components; those retain their own terms. Brother packages and extracted files are excluded from this repository and the planned native distribution.
+Original project code and documentation are licensed under [Apache License 2.0](LICENSE). Brother software and other third-party components retain their own terms. Brother artifacts are excluded from this repository and the native package.
