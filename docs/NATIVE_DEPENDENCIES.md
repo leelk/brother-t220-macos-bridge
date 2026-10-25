@@ -4,7 +4,7 @@ Reviewed 2026-10-25. Preliminary screening, not a release SBOM. No dependency wa
 
 | Component | Candidate / evidence | License and action |
 |---|---|---|
-| Project-owned native code | Not yet written | Owner license decision pending; Apache-2.0 recommended, MIT alternative. Do not relicense vendor/dependency code with this choice. |
+| Project-owned native code | Not yet written | Owner selected Apache-2.0 on 2026-10-25; root LICENSE applies to original project code/documentation. Vendor/dependency code retains its own terms. |
 | PAPPL | 1.4.12 appears on official release page; source master reviewed only | Apache-2.0 plus exceptions in NOTICE. Preserve LICENSE/NOTICE, changes and attribution; verify exact pinned release. |
 | libcups | Choice of system vs bundled unresolved | OpenPrinting master LICENSE is Apache-2.0; inspect its NOTICE and actual chosen version. Do not apply that result automatically to Apple's system CUPS or older CUPS. |
 | zlib | Release/site version 1.3.2 | Zlib license: retain source notices and mark alterations; include notice in packaged license inventory. |

@@ -193,3 +193,7 @@ improvement remains unverified until this comparison is performed.
 ## Repository policy
 
 Do not commit Brother's `.deb`, extracted driver files or binaries, generated `.prn`/`.ppm` files, spool documents, logs, credentials, keys, or local environment files. The included `.gitignore` excludes them.
+
+## License
+
+Original project code and documentation are licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE). This does not license Brother software or other third-party components; those retain their own terms. Brother packages and extracted files are excluded from this repository and the planned native distribution.

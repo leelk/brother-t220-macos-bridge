@@ -30,8 +30,8 @@ Brother's [OS support page](https://support.brother.com/g/b/oslist.aspx?c=eu_ot&
 ## Gate status
 
 - T10 partial: local license/version/hash inventory complete; original DEB provenance and current click-through terms unresolved.
-- T11 partial: dependency screening recorded in NATIVE_DEPENDENCIES.md; project license awaits owner choice; no LICENSE was silently added.
+- T11 partial: dependency screening recorded in NATIVE_DEPENDENCIES.md; owner selected Apache-2.0 on 2026-10-25 and root LICENSE was added in a subsequent change; exact dependency build/license audit remains pending.
 - T12 partial: public support search and provisional ADR recorded; current official Mac software needs inspection before choosing replacement-converter work conclusively.
 - T13 complete as a specification: NATIVE_ORACLE_EXPERIMENTS.md; no oracle runs executed.
 
-M1 is not accepted as complete. Continue read-only official package/source review and owner license selection. Conversion-only research can follow once provenance/terms are matched and the experiment preflight passes. USB writes, disassembly and vendor redistribution remain outside this step. Docker fallback and all runtime files remain unchanged.
+M1 is not accepted as complete. Continue read-only official package/source review and the exact dependency audit. Conversion-only research can follow once provenance/terms are matched and the experiment preflight passes. USB writes, disassembly and vendor redistribution remain outside this step. Docker fallback and all runtime files remain unchanged.
